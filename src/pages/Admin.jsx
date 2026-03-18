@@ -166,11 +166,46 @@ function Admin() {
       </div>
 
       <div style={{ display: "flex", gap: "20px", flexWrap: "wrap", marginBottom: "30px" }}>
-        <div style={{ background: "#1e1e2e", padding: "20px", borderRadius: "10px", minWidth: "150px" }}>
-          <h3>Total Visits</h3>
-          <p style={{ fontSize: "32px" }}>{filteredVisitors.length}</p>
-        </div>
-      </div>
+  <div style={{ background: "#1e1e2e", padding: "20px", borderRadius: "10px", minWidth: "150px" }}>
+    <h3>Total Visits</h3>
+    <p style={{ fontSize: "32px" }}>{filteredVisitors.length}</p>
+  </div>
+
+  <div style={{ background: "#1e1e2e", padding: "20px", borderRadius: "10px", minWidth: "150px" }}>
+    <h3>Most Common Reason</h3>
+    <p style={{ fontSize: "18px" }}>
+      {filteredVisitors.length === 0 ? "N/A" : 
+        Object.entries(
+          filteredVisitors.reduce((acc, v) => {
+            acc[v.reason] = (acc[v.reason] || 0) + 1;
+            return acc;
+          }, {})
+        ).sort((a, b) => b[1] - a[1])[0]?.[0] || "N/A"}
+    </p>
+  </div>
+
+  <div style={{ background: "#1e1e2e", padding: "20px", borderRadius: "10px", minWidth: "150px" }}>
+    <h3>Most Active College</h3>
+    <p style={{ fontSize: "14px" }}>
+      {filteredVisitors.length === 0 ? "N/A" :
+        Object.entries(
+          filteredVisitors.reduce((acc, v) => {
+            if (v.college) acc[v.college] = (acc[v.college] || 0) + 1;
+            return acc;
+          }, {})
+        ).sort((a, b) => b[1] - a[1])[0]?.[0] || "N/A"}
+    </p>
+  </div>
+
+  <div style={{ background: "#1e1e2e", padding: "20px", borderRadius: "10px", minWidth: "150px" }}>
+    <h3>Students vs Employees</h3>
+    <p style={{ fontSize: "14px" }}>
+      Students: {filteredVisitors.filter(v => v.isEmployee === "no").length}<br/>
+      Teachers: {filteredVisitors.filter(v => v.isEmployee === "teacher").length}<br/>
+      Staff: {filteredVisitors.filter(v => v.isEmployee === "staff").length}
+    </p>
+  </div>
+</div>
 
       <button
   onClick={exportToPDF}
