@@ -114,7 +114,14 @@ function Admin() {
 
   return (
     <div style={{ padding: "40px" }}>
-      <h1>Admin Dashboard</h1>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+  <h1>Admin Dashboard</h1>
+  <button
+    onClick={() => navigate("/home")}
+    style={{ padding: "10px 20px", background: "#4a90e2", color: "white", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer" }}>
+    Go to Kiosk
+  </button>
+</div>
 
       <div style={{ marginBottom: "20px" }}>
         <strong>Total visitors: {filteredVisitors.length}</strong>

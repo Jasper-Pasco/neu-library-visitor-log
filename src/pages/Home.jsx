@@ -136,62 +136,95 @@ function Home() {
 
   if (submitted) {
     return (
-      <div style={{ textAlign: "center", marginTop: "100px" }}>
-        <h2>Welcome to NEU Library, {user.displayName}!</h2>
-        <p>Program: {program}</p>
-        <p>Your visit has been logged. Enjoy your stay!</p>
+      <div style={{
+        minHeight: "100vh",
+        background: "#0a0a1a",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "white",
+        textAlign: "center",
+        padding: "40px",
+      }}>
+        <h1 style={{ fontSize: "48px", marginBottom: "10px" }}>🎉</h1>
+        <h2 style={{ fontSize: "36px", marginBottom: "10px" }}>Welcome to NEU Library!</h2>
+        <h3 style={{ fontSize: "24px", marginBottom: "5px" }}>{user.displayName}</h3>
+        <p style={{ fontSize: "18px", color: "#aaa" }}>{program}</p>
+        <p style={{ fontSize: "16px", marginTop: "20px", color: "#aaa" }}>Your visit has been logged. Enjoy your stay!</p>
       </div>
     );
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "100px" }}>
-      <h2>Welcome, {user?.displayName}!</h2>
-      <p>Please fill in the details below:</p>
+    <div style={{
+      minHeight: "100vh",
+      background: "#0a0a1a",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "white",
+      padding: "40px",
+    }}>
+      <h1 style={{ fontSize: "36px", marginBottom: "5px" }}>NEU Library</h1>
+      <p style={{ fontSize: "18px", color: "#aaa", marginBottom: "30px" }}>
+        Welcome, {user?.displayName}! Please fill in the details below.
+      </p>
 
-      <div style={{ marginBottom: "10px" }}>
-        <label>Reason for visit: </label>
-        <select value={reason} onChange={(e) => setReason(e.target.value)}>
-          <option value="">-- Select a reason --</option>
-          <option value="Reading">Reading</option>
-          <option value="Researching">Researching</option>
-          <option value="Use of Computer">Use of Computer</option>
-          <option value="Meeting">Meeting</option>
-        </select>
-      </div>
+      <div style={{ width: "100%", maxWidth: "500px", display: "flex", flexDirection: "column", gap: "15px" }}>
+        
+        <div>
+          <label style={{ display: "block", marginBottom: "5px", fontSize: "16px" }}>Reason for Visit</label>
+          <select value={reason} onChange={(e) => setReason(e.target.value)}
+            style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "none", background: "#1e1e2e", color: "white" }}>
+            <option value="">-- Select a reason --</option>
+            <option value="Reading">Reading</option>
+            <option value="Researching">Researching</option>
+            <option value="Use of Computer">Use of Computer</option>
+            <option value="Meeting">Meeting</option>
+          </select>
+        </div>
 
-      <div style={{ marginBottom: "10px" }}>
-        <label>College: </label>
-        <select value={college} onChange={handleCollegeChange}>
-          <option value="">-- Select a college --</option>
-          {Object.keys(collegePrograms).map((col) => (
-            <option key={col} value={col}>{col}</option>
-          ))}
-        </select>
-      </div>
-
-      {college && (
-        <div style={{ marginBottom: "10px" }}>
-          <label>Program: </label>
-          <select value={program} onChange={(e) => setProgram(e.target.value)}>
-            <option value="">-- Select a program --</option>
-            {collegePrograms[college].map((prog) => (
-              <option key={prog} value={prog}>{prog}</option>
+        <div>
+          <label style={{ display: "block", marginBottom: "5px", fontSize: "16px" }}>College</label>
+          <select value={college} onChange={handleCollegeChange}
+            style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "none", background: "#1e1e2e", color: "white" }}>
+            <option value="">-- Select a college --</option>
+            {Object.keys(collegePrograms).map((col) => (
+              <option key={col} value={col}>{col}</option>
             ))}
           </select>
         </div>
-      )}
 
-      <div style={{ marginBottom: "20px" }}>
-        <label>Are you an employee? </label>
-        <select value={isEmployee} onChange={(e) => setIsEmployee(e.target.value)}>
-          <option value="no">No (Student)</option>
-          <option value="teacher">Yes - Teacher</option>
-          <option value="staff">Yes - Staff</option>
-        </select>
+        {college && (
+          <div>
+            <label style={{ display: "block", marginBottom: "5px", fontSize: "16px" }}>Program</label>
+            <select value={program} onChange={(e) => setProgram(e.target.value)}
+              style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "none", background: "#1e1e2e", color: "white" }}>
+              <option value="">-- Select a program --</option>
+              {collegePrograms[college].map((prog) => (
+                <option key={prog} value={prog}>{prog}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div>
+          <label style={{ display: "block", marginBottom: "5px", fontSize: "16px" }}>Are you an employee?</label>
+          <select value={isEmployee} onChange={(e) => setIsEmployee(e.target.value)}
+            style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "none", background: "#1e1e2e", color: "white" }}>
+            <option value="no">No (Student)</option>
+            <option value="teacher">Yes - Teacher</option>
+            <option value="staff">Yes - Staff</option>
+          </select>
+        </div>
+
+        <button onClick={handleSubmit}
+          style={{ width: "100%", padding: "15px", fontSize: "18px", borderRadius: "8px", border: "none", background: "#4a90e2", color: "white", cursor: "pointer", marginTop: "10px" }}>
+          Log My Visit
+        </button>
       </div>
-
-      <button onClick={handleSubmit}>Log my visit</button>
     </div>
   );
 }
