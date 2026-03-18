@@ -11,6 +11,8 @@ function Admin() {
   const [blocked, setBlocked] = useState([]);
   const [filter, setFilter] = useState("today");
   const [reasonFilter, setReasonFilter] = useState("");
+  const [collegeFilter, setCollegeFilter] = useState("");
+  const [employeeFilter, setEmployeeFilter] = useState("");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -81,14 +83,16 @@ function Admin() {
   };
 
   const filteredVisitors = visitors
-    .filter(filterByDate)
-    .filter((v) => (reasonFilter ? v.reason === reasonFilter : true))
-    .filter((v) =>
-      search
-        ? v.name?.toLowerCase().includes(search.toLowerCase()) ||
-          v.reason?.toLowerCase().includes(search.toLowerCase())
-        : true
-    );
+  .filter(filterByDate)
+  .filter((v) => (reasonFilter ? v.reason === reasonFilter : true))
+  .filter((v) => (collegeFilter ? v.college === collegeFilter : true))
+  .filter((v) => (employeeFilter ? v.isEmployee === employeeFilter : true))
+  .filter((v) =>
+    search
+      ? v.name?.toLowerCase().includes(search.toLowerCase()) ||
+        v.reason?.toLowerCase().includes(search.toLowerCase())
+      : true
+  );
     
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -124,13 +128,34 @@ function Admin() {
           <option value="all">All Time</option>
         </select>
 
-        <select value={reasonFilter} onChange={(e) => setReasonFilter(e.target.value)}>
-          <option value="">All Reasons</option>
-          <option value="Reading">Reading</option>
-          <option value="Researching">Researching</option>
-          <option value="Use of Computer">Use of Computer</option>
-          <option value="Meeting">Meeting</option>
-        </select>
+        <select value={collegeFilter} onChange={(e) => setCollegeFilter(e.target.value)}>
+  <option value="">All Colleges</option>
+  <option value="College of Accountancy">College of Accountancy</option>
+  <option value="College of Agriculture">College of Agriculture</option>
+  <option value="College of Arts and Sciences">College of Arts and Sciences</option>
+  <option value="College of Business Administration">College of Business Administration</option>
+  <option value="College of Communication">College of Communication</option>
+  <option value="College of Criminology">College of Criminology</option>
+  <option value="College of Education">College of Education</option>
+  <option value="College of Engineering and Architecture">College of Engineering and Architecture</option>
+  <option value="College of Informatics and Computing Studies">College of Informatics and Computing Studies</option>
+  <option value="College of Law">College of Law</option>
+  <option value="College of Medical Technology">College of Medical Technology</option>
+  <option value="College of Medicine">College of Medicine</option>
+  <option value="College of Midwifery">College of Midwifery</option>
+  <option value="College of Music">College of Music</option>
+  <option value="College of Nursing">College of Nursing</option>
+  <option value="College of Physical Therapy">College of Physical Therapy</option>
+  <option value="College of Respiratory Therapy">College of Respiratory Therapy</option>
+  <option value="School of International Relations">School of International Relations</option>
+</select>
+
+<select value={employeeFilter} onChange={(e) => setEmployeeFilter(e.target.value)}>
+  <option value="">All Visitors</option>
+  <option value="no">Students</option>
+  <option value="teacher">Teachers</option>
+  <option value="staff">Staff</option>
+</select>
 
         <input
           type="text"
@@ -160,6 +185,8 @@ function Admin() {
             <th style={{ textAlign: "left", padding: "10px" }}>Name</th>
             <th style={{ textAlign: "left", padding: "10px" }}>Email</th>
             <th style={{ textAlign: "left", padding: "10px" }}>Reason</th>
+            <th style={{ textAlign: "left", padding: "10px" }}>College</th>
+            <th style={{ textAlign: "left", padding: "10px" }}>Employee</th>
             <th style={{ textAlign: "left", padding: "10px" }}>Date</th>
             <th style={{ textAlign: "left", padding: "10px" }}>Action</th>
           </tr>
@@ -167,12 +194,14 @@ function Admin() {
         <tbody>
           {filteredVisitors.map((v) => (
             <tr key={v.id} style={{ borderBottom: "1px solid #333" }}>
-              <td style={{ padding: "10px" }}>{v.name}</td>
-              <td style={{ padding: "10px" }}>{v.email}</td>
-              <td style={{ padding: "10px" }}>{v.reason}</td>
-              <td style={{ padding: "10px" }}>
-                {v.timestamp.toDate().toLocaleDateString()}
-              </td>
+  <td style={{ padding: "10px" }}>{v.name}</td>
+  <td style={{ padding: "10px" }}>{v.email}</td>
+  <td style={{ padding: "10px" }}>{v.reason}</td>
+  <td style={{ padding: "10px" }}>{v.college || "N/A"}</td>
+  <td style={{ padding: "10px" }}>{v.isEmployee === "no" ? "Student" : v.isEmployee === "teacher" ? "Teacher" : "Staff"}</td>
+  <td style={{ padding: "10px" }}>
+    {v.timestamp.toDate().toLocaleDateString()}
+  </td>
               <td style={{ padding: "10px" }}>
                 {isBlocked(v.email) ? (
                   <button
