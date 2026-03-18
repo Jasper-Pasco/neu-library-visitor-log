@@ -216,16 +216,17 @@ function Admin() {
 
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
-          <tr style={{ borderBottom: "1px solid #444" }}>
-            <th style={{ textAlign: "left", padding: "10px" }}>Name</th>
-            <th style={{ textAlign: "left", padding: "10px" }}>Email</th>
-            <th style={{ textAlign: "left", padding: "10px" }}>Reason</th>
-            <th style={{ textAlign: "left", padding: "10px" }}>College</th>
-            <th style={{ textAlign: "left", padding: "10px" }}>Employee</th>
-            <th style={{ textAlign: "left", padding: "10px" }}>Date</th>
-            <th style={{ textAlign: "left", padding: "10px" }}>Action</th>
-          </tr>
-        </thead>
+  <tr style={{ borderBottom: "1px solid #444" }}>
+    <th style={{ textAlign: "left", padding: "10px" }}>Name</th>
+    <th style={{ textAlign: "left", padding: "10px" }}>Email</th>
+    <th style={{ textAlign: "left", padding: "10px" }}>Reason</th>
+    <th style={{ textAlign: "left", padding: "10px" }}>College</th>
+    <th style={{ textAlign: "left", padding: "10px" }}>Program</th>
+    <th style={{ textAlign: "left", padding: "10px" }}>Employee</th>
+    <th style={{ textAlign: "left", padding: "10px" }}>Date</th>
+    <th style={{ textAlign: "left", padding: "10px" }}>Action</th>
+  </tr>
+ </thead>
         <tbody>
           {filteredVisitors.map((v) => (
             <tr key={v.id} style={{ borderBottom: "1px solid #333" }}>
@@ -233,6 +234,7 @@ function Admin() {
   <td style={{ padding: "10px" }}>{v.email}</td>
   <td style={{ padding: "10px" }}>{v.reason}</td>
   <td style={{ padding: "10px" }}>{v.college || "N/A"}</td>
+  <td style={{ padding: "10px" }}>{v.program || "N/A"}</td>
   <td style={{ padding: "10px" }}>{v.isEmployee === "no" ? "Student" : v.isEmployee === "teacher" ? "Teacher" : "Staff"}</td>
   <td style={{ padding: "10px" }}>
     {v.timestamp.toDate().toLocaleDateString()}
