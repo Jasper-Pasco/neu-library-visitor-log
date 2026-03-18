@@ -159,7 +159,7 @@ function Home() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "#0a0a1a",
+      background: "linear-gradient(135deg, #003087 0%, #001a4d 100%)",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -221,7 +221,7 @@ function Home() {
         </div>
 
         <button onClick={handleSubmit}
-          style={{ width: "100%", padding: "15px", fontSize: "18px", borderRadius: "8px", border: "none", background: "#4a90e2", color: "white", cursor: "pointer", marginTop: "10px" }}>
+        style={{ width: "100%", padding: "15px", fontSize: "18px", borderRadius: "8px", border: "none", background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#001a4d", cursor: "pointer", marginTop: "10px" }}>
           Log My Visit
         </button>
       </div>

@@ -17,7 +17,6 @@ function Login() {
         return;
       }
 
-      // Check if user is blocked
       const blockedSnapshot = await getDocs(collection(db, "blocked"));
       const blockedEmails = blockedSnapshot.docs.map((doc) => doc.data().email);
 
@@ -27,7 +26,6 @@ function Login() {
         return;
       }
 
-      // Check if the user is an admin
       const adminSnapshot = await getDocs(collection(db, "admins"));
       const adminEmails = adminSnapshot.docs.map((doc) => doc.data().email);
 
@@ -42,10 +40,83 @@ function Login() {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "100px" }}>
-      <h1>NEU Library Visitor Log</h1>
-      <p>Please sign in with your NEU Google account</p>
-      <button onClick={handleLogin}>Sign in with Google</button>
+    <div style={{
+      minHeight: "100vh",
+      background: "linear-gradient(135deg, #003087 0%, #001a4d 100%)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontFamily: "'Segoe UI', sans-serif",
+    }}>
+      <div style={{
+        background: "rgba(255,255,255,0.05)",
+        backdropFilter: "blur(10px)",
+        border: "1px solid rgba(255,215,0,0.3)",
+        borderRadius: "20px",
+        padding: "60px 50px",
+        textAlign: "center",
+        maxWidth: "420px",
+        width: "90%",
+        boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+      }}>
+        <div style={{
+          width: "80px",
+          height: "80px",
+          background: "linear-gradient(135deg, #FFD700, #FFA500)",
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "0 auto 20px",
+          fontSize: "36px",
+        }}>
+          📚
+        </div>
+
+        <h1 style={{
+          color: "#FFD700",
+          fontSize: "28px",
+          marginBottom: "8px",
+          fontWeight: "700",
+          letterSpacing: "1px",
+        }}>NEU Library</h1>
+
+        <p style={{
+          color: "rgba(255,255,255,0.6)",
+          fontSize: "14px",
+          marginBottom: "40px",
+          letterSpacing: "2px",
+          textTransform: "uppercase",
+        }}>Visitor Log System</p>
+
+        <p style={{
+          color: "rgba(255,255,255,0.8)",
+          fontSize: "15px",
+          marginBottom: "30px",
+        }}>Sign in with your NEU Google account to continue</p>
+
+        <button onClick={handleLogin} style={{
+          width: "100%",
+          padding: "14px",
+          background: "linear-gradient(135deg, #FFD700, #FFA500)",
+          color: "#001a4d",
+          border: "none",
+          borderRadius: "10px",
+          fontSize: "16px",
+          fontWeight: "700",
+          cursor: "pointer",
+          letterSpacing: "0.5px",
+          boxShadow: "0 4px 15px rgba(255,215,0,0.3)",
+        }}>
+          Sign in with Google
+        </button>
+
+        <p style={{
+          color: "rgba(255,255,255,0.3)",
+          fontSize: "12px",
+          marginTop: "30px",
+        }}>New Era University — Library Services</p>
+      </div>
     </div>
   );
 }
