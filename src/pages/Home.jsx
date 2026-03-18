@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs, Timestamp } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
 const collegePrograms = {
@@ -92,6 +92,7 @@ const collegePrograms = {
 
 function Home() {
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [reason, setReason] = useState("");
   const [college, setCollege] = useState("");
   const [program, setProgram] = useState("");
@@ -100,11 +101,15 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
         navigate("/");
       } else {
         setUser(currentUser);
+        // Check if user is admin
+        const adminSnapshot = await getDocs(collection(db, "admins"));
+        const adminEmails = adminSnapshot.docs.map((doc) => doc.data().email);
+        setIsAdmin(adminEmails.includes(currentUser.email));
       }
     });
     return () => unsubscribe();
@@ -138,7 +143,7 @@ function Home() {
     return (
       <div style={{
         minHeight: "100vh",
-        background: "#0a0a1a",
+        background: "linear-gradient(135deg, #003087 0%, #001a4d 100%)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -146,12 +151,28 @@ function Home() {
         color: "white",
         textAlign: "center",
         padding: "40px",
+        fontFamily: "'Segoe UI', sans-serif",
       }}>
         <h1 style={{ fontSize: "48px", marginBottom: "10px" }}>🎉</h1>
-        <h2 style={{ fontSize: "36px", marginBottom: "10px" }}>Welcome to NEU Library!</h2>
+        <h2 style={{ fontSize: "36px", marginBottom: "10px", color: "#FFD700" }}>Welcome to NEU Library!</h2>
         <h3 style={{ fontSize: "24px", marginBottom: "5px" }}>{user.displayName}</h3>
         <p style={{ fontSize: "18px", color: "#aaa" }}>{program}</p>
         <p style={{ fontSize: "16px", marginTop: "20px", color: "#aaa" }}>Your visit has been logged. Enjoy your stay!</p>
+        {isAdmin && (
+          <button onClick={() => navigate("/admin")} style={{
+            marginTop: "30px",
+            padding: "12px 24px",
+            background: "linear-gradient(135deg, #FFD700, #FFA500)",
+            color: "#001a4d",
+            border: "none",
+            borderRadius: "10px",
+            fontSize: "15px",
+            fontWeight: "700",
+            cursor: "pointer",
+          }}>
+            Back to Dashboard
+          </button>
+        )}
       </div>
     );
   }
@@ -166,18 +187,50 @@ function Home() {
       justifyContent: "center",
       color: "white",
       padding: "40px",
+      fontFamily: "'Segoe UI', sans-serif",
     }}>
-      <h1 style={{ fontSize: "36px", marginBottom: "5px" }}>NEU Library</h1>
-      <p style={{ fontSize: "18px", color: "#aaa", marginBottom: "30px" }}>
+
+      {/* Back to Dashboard button - admin only */}
+      <div style={{ position: "absolute", top: "30px", right: "40px", display: "flex", gap: "10px" }}>
+  {isAdmin && (
+    <button onClick={() => navigate("/admin")} style={{
+      padding: "12px 24px",
+      background: "linear-gradient(135deg, #FFD700, #FFA500)",
+      color: "#001a4d",
+      border: "none",
+      borderRadius: "10px",
+      fontSize: "15px",
+      fontWeight: "700",
+      cursor: "pointer",
+    }}>
+      Back to Dashboard
+    </button>
+  )}
+  <button onClick={() => { auth.signOut(); navigate("/"); }} style={{
+    padding: "12px 24px",
+    background: "rgba(255,255,255,0.1)",
+    color: "white",
+    border: "1px solid rgba(255,255,255,0.3)",
+    borderRadius: "10px",
+    fontSize: "15px",
+    fontWeight: "700",
+    cursor: "pointer",
+  }}>
+    Logout
+  </button>
+</div>
+
+      <h1 style={{ fontSize: "36px", marginBottom: "5px", color: "#FFD700" }}>NEU Library</h1>
+      <p style={{ fontSize: "18px", color: "rgba(255,255,255,0.6)", marginBottom: "30px" }}>
         Welcome, {user?.displayName}! Please fill in the details below.
       </p>
 
       <div style={{ width: "100%", maxWidth: "500px", display: "flex", flexDirection: "column", gap: "15px" }}>
-        
+
         <div>
           <label style={{ display: "block", marginBottom: "5px", fontSize: "16px" }}>Reason for Visit</label>
           <select value={reason} onChange={(e) => setReason(e.target.value)}
-            style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "none", background: "#1e1e2e", color: "white" }}>
+            style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "1px solid rgba(255,215,0,0.3)", background: "#1e2a4a", color: "white" }}>
             <option value="">-- Select a reason --</option>
             <option value="Reading">Reading</option>
             <option value="Researching">Researching</option>
@@ -189,7 +242,7 @@ function Home() {
         <div>
           <label style={{ display: "block", marginBottom: "5px", fontSize: "16px" }}>College</label>
           <select value={college} onChange={handleCollegeChange}
-            style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "none", background: "#1e1e2e", color: "white" }}>
+            style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "1px solid rgba(255,215,0,0.3)", background: "#1e2a4a", color: "white" }}>
             <option value="">-- Select a college --</option>
             {Object.keys(collegePrograms).map((col) => (
               <option key={col} value={col}>{col}</option>
@@ -201,7 +254,7 @@ function Home() {
           <div>
             <label style={{ display: "block", marginBottom: "5px", fontSize: "16px" }}>Program</label>
             <select value={program} onChange={(e) => setProgram(e.target.value)}
-              style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "none", background: "#1e1e2e", color: "white" }}>
+              style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "1px solid rgba(255,215,0,0.3)", background: "#1e2a4a", color: "white" }}>
               <option value="">-- Select a program --</option>
               {collegePrograms[college].map((prog) => (
                 <option key={prog} value={prog}>{prog}</option>
@@ -213,15 +266,25 @@ function Home() {
         <div>
           <label style={{ display: "block", marginBottom: "5px", fontSize: "16px" }}>Are you an employee?</label>
           <select value={isEmployee} onChange={(e) => setIsEmployee(e.target.value)}
-            style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "none", background: "#1e1e2e", color: "white" }}>
+            style={{ width: "100%", padding: "12px", fontSize: "16px", borderRadius: "8px", border: "1px solid rgba(255,215,0,0.3)", background: "#1e2a4a", color: "white" }}>
             <option value="no">No (Student)</option>
             <option value="teacher">Yes - Teacher</option>
             <option value="staff">Yes - Staff</option>
           </select>
         </div>
 
-        <button onClick={handleSubmit}
-        style={{ width: "100%", padding: "15px", fontSize: "18px", borderRadius: "8px", border: "none", background: "linear-gradient(135deg, #FFD700, #FFA500)", color: "#001a4d", cursor: "pointer", marginTop: "10px" }}>
+        <button onClick={handleSubmit} style={{
+          width: "100%",
+          padding: "15px",
+          fontSize: "18px",
+          borderRadius: "8px",
+          border: "none",
+          background: "linear-gradient(135deg, #FFD700, #FFA500)",
+          color: "#001a4d",
+          cursor: "pointer",
+          marginTop: "10px",
+          fontWeight: "700",
+        }}>
           Log My Visit
         </button>
       </div>

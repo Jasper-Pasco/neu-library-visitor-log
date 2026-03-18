@@ -119,15 +119,15 @@ function Admin() {
     </div>
   );
 
-  const selectStyle = {
+    const selectStyle = {
     padding: "10px 14px",
     borderRadius: "8px",
     border: "1px solid rgba(255,215,0,0.3)",
-    background: "rgba(255,255,255,0.1)",
+    background: "#1e2a4a",
     color: "white",
     fontSize: "14px",
     cursor: "pointer",
-  };
+    };
 
   const cardStyle = {
     background: "rgba(255,255,255,0.08)",
@@ -147,18 +147,32 @@ function Admin() {
           <h1 style={{ fontSize: "32px", fontWeight: "700", color: "#FFD700", marginBottom: "4px" }}>Admin Dashboard</h1>
           <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>NEU Library Visitor Log System</p>
         </div>
-        <button onClick={() => navigate("/home")} style={{
-          padding: "12px 24px",
-          background: "linear-gradient(135deg, #FFD700, #FFA500)",
-          color: "#001a4d",
-          border: "none",
-          borderRadius: "10px",
-          fontSize: "15px",
-          fontWeight: "700",
-          cursor: "pointer",
-        }}>
-          Go to Kiosk
-        </button>
+        <div style={{ display: "flex", gap: "10px" }}>
+  <button onClick={() => navigate("/home")} style={{
+    padding: "12px 24px",
+    background: "linear-gradient(135deg, #FFD700, #FFA500)",
+    color: "#001a4d",
+    border: "none",
+    borderRadius: "10px",
+    fontSize: "15px",
+    fontWeight: "700",
+    cursor: "pointer",
+  }}>
+    Go to Kiosk
+  </button>
+  <button onClick={() => { auth.signOut(); navigate("/"); }} style={{
+    padding: "12px 24px",
+    background: "rgba(255,255,255,0.1)",
+    color: "white",
+    border: "1px solid rgba(255,255,255,0.3)",
+    borderRadius: "10px",
+    fontSize: "15px",
+    fontWeight: "700",
+    cursor: "pointer",
+  }}>
+    Logout
+  </button>
+</div>
       </div>
 
       {/* Filters */}
