@@ -93,6 +93,27 @@ const collegePrograms = {
 function Home() {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    setCurrentTime(new Date());
+  }, 1000);
+  return () => clearInterval(timer);
+}, []);
+
+const formatPHT = (date) => {
+  return date.toLocaleString("en-PH", {
+    timeZone: "Asia/Manila",
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+};
   const [reason, setReason] = useState("");
   const [college, setCollege] = useState("");
   const [program, setProgram] = useState("");
@@ -221,9 +242,10 @@ function Home() {
 </div>
 
       <h1 style={{ fontSize: "36px", marginBottom: "5px", color: "#FFD700" }}>NEU Library</h1>
-      <p style={{ fontSize: "18px", color: "rgba(255,255,255,0.6)", marginBottom: "30px" }}>
-        Welcome, {user?.displayName}! Please fill in the details below.
-      </p>
+<p style={{ fontSize: "13px", color: "#FFD700", marginBottom: "8px" }}>{formatPHT(currentTime)} PHT</p>
+<p style={{ fontSize: "18px", color: "rgba(255,255,255,0.6)", marginBottom: "30px" }}>
+  Welcome, {user?.displayName}! Please fill in the details below.
+</p>
 
       <div style={{ width: "100%", maxWidth: "500px", display: "flex", flexDirection: "column", gap: "15px" }}>
 

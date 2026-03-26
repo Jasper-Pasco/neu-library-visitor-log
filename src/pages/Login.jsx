@@ -2,9 +2,31 @@ import { auth, provider, db } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
+import { useState, useEffect } from "react";
 
 function Login() {
   const navigate = useNavigate();
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatPHT = (date) => {
+    return date.toLocaleString("en-PH", {
+      timeZone: "Asia/Manila",
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
 
   const handleLogin = async () => {
     try {
@@ -59,19 +81,13 @@ function Login() {
         width: "90%",
         boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
       }}>
-        <div style={{
-          width: "80px",
-          height: "80px",
-          background: "linear-gradient(135deg, #FFD700, #FFA500)",
+        <img src="/neu-logo.png" alt="NEU Logo" style={{
+          width: "100px",
+          height: "100px",
           borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
           margin: "0 auto 20px",
-          fontSize: "36px",
-        }}>
-          📚
-        </div>
+          display: "block",
+        }} />
 
         <h1 style={{
           color: "#FFD700",
@@ -84,10 +100,16 @@ function Login() {
         <p style={{
           color: "rgba(255,255,255,0.6)",
           fontSize: "14px",
-          marginBottom: "40px",
+          marginBottom: "10px",
           letterSpacing: "2px",
           textTransform: "uppercase",
-        }}>Visitor Log System</p>
+        }}>Visitor Log</p>
+
+        <p style={{
+          color: "#FFD700",
+          fontSize: "13px",
+          marginBottom: "30px",
+        }}>{formatPHT(currentTime)} PHT</p>
 
         <p style={{
           color: "rgba(255,255,255,0.8)",

@@ -16,6 +16,27 @@ function Admin() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    setCurrentTime(new Date());
+  }, 1000);
+  return () => clearInterval(timer);
+}, []);
+
+const formatPHT = (date) => {
+  return date.toLocaleString("en-PH", {
+    timeZone: "Asia/Manila",
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+};
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -146,6 +167,7 @@ function Admin() {
         <div>
           <h1 style={{ fontSize: "32px", fontWeight: "700", color: "#FFD700", marginBottom: "4px" }}>Admin Dashboard</h1>
           <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>NEU Library Visitor Log System</p>
+          <p style={{ color: "#FFD700", fontSize: "13px", marginTop: "4px" }}>{formatPHT(currentTime)} PHT</p>
         </div>
         <div style={{ display: "flex", gap: "10px" }}>
   <button onClick={() => navigate("/home")} style={{
@@ -305,7 +327,17 @@ function Admin() {
                 <td style={{ padding: "14px 16px", fontSize: "14px", color: "rgba(255,255,255,0.7)" }}>{v.college || "N/A"}</td>
                 <td style={{ padding: "14px 16px", fontSize: "14px" }}>{v.program || "N/A"}</td>
                 <td style={{ padding: "14px 16px", fontSize: "14px" }}>{v.isEmployee === "no" ? "Student" : v.isEmployee === "teacher" ? "Teacher" : "Staff"}</td>
-                <td style={{ padding: "14px 16px", fontSize: "14px", color: "rgba(255,255,255,0.7)" }}>{v.timestamp.toDate().toLocaleDateString()}</td>
+                <td style={{ padding: "14px 16px", fontSize: "14px", color: "rgba(255,255,255,0.7)" }}>
+                {v.timestamp.toDate().toLocaleString("en-PH", {
+                timeZone: "Asia/Manila",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                })}
+                </td>
                 <td style={{ padding: "14px 16px" }}>
                   {isBlocked(v.email) ? (
                     <button onClick={() => handleUnblock(v.email)} style={{ background: "#22c55e", color: "white", border: "none", padding: "6px 14px", borderRadius: "6px", cursor: "pointer", fontWeight: "600", fontSize: "13px" }}>
